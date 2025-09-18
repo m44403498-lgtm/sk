@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Summary - SK Productions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a; /* Dark background */
+            color: #f5f5f5; /* Light text for contrast */
+        }
+        .tab-active {
+            border-color: #ffd051; /* New yellow for active tab */
+            color: #ffd051;
+            font-weight: 600;
+        }
+        .tab-inactive {
+            border-color: transparent;
+            color: #a3a3a3; /* Lighter gray for inactive */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        /* Style for the Seasons font */
+        .seasons-font {
+            font-family: 'Seasons', sans-serif; /* Fallback to sans-serif if 'Seasons' is not loaded */
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="max-w-6xl mx-auto p-4 md:p-8">
+        <header class="text-center mb-8 md:mb-12">
+            
+            <p class="text-3xl font-bold text-white seasons-font mb-4"><i>SK</i> Productions</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Invoice Summary</h1>
+            <p class="text-lg text-gray-300 mt-2">Billed to: Autocentre</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 md:mb-12">
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-700 flex flex-col justify-center items-center text-center">
+                <h2 class="text-sm font-medium text-gray-300 tracking-wider uppercase">Total Due</h2>
+                <p class="text-5xl font-bold text-[#ffd051] mt-2">PKR 99,500</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-700 flex flex-col justify-center items-center text-center">
+                <h2 class="text-sm font-medium text-gray-300 tracking-wider uppercase">Payment Due</h2>
+                <p class="text-4xl font-semibold text-red-500 mt-2">September 10, 2025</p>
+            </div>
+        </div>
+        
+        <div class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-sm border border-gray-700 mb-8 md:mb-12">
+            <h2 class="text-2xl font-bold text-white text-center mb-2">Cost Breakdown</h2>
+            <p class="text-gray-300 text-center max-w-2xl mx-auto mb-8">This interactive summary provides a clear breakdown of the services rendered for Autocentre over the past two months. The chart visualizes the contribution of each service category to the total cost. Use the chart and detailed tabs below to explore the charges.</p>
+            <div class="chart-container">
+                <canvas id="invoiceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-sm border border-gray-700">
+             <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-white">Detailed Services</h2>
+                 <p class="text-gray-300 max-w-2xl mx-auto mt-2">For a granular view of the invoice, select a category below. Each tab contains a complete list of the vehicles and services included in that charge.</p>
+            </div>
+
+            <div class="mb-6 border-b border-gray-700">
+                <nav class="flex justify-center -mb-px space-x-6" aria-label="Tabs">
+                    <button class="tab-button tab-active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="full-production">Full Production</button>
+                    <button class="tab-button tab-inactive whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="photo-only">Photo-Only</button>
+                    <button class="tab-button tab-inactive whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="social-media">Social Media</button>
+                </nav>
+            </div>
+
+            <div id="tab-content">
+                <div id="full-production" class="tab-pane">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Car Name</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-gray-800 divide-y divide-gray-700">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="photo-only" class="tab-pane hidden">
+                    <div class="bg-gray-700 rounded-lg p-6">
+                        <p class="text-gray-300 mb-4">This is a single charge for photography services for three vehicles, with no video production included.</p>
+                        <div class="flow-root">
+                            <ul role="list" class="divide-y divide-gray-600">
+                                <li class="py-3 sm:py-4 flex items-center justify-between">
+                                    <p class="text-sm font-medium text-white truncate">2x Daihatsu Mira, 1x Toyota Yaris</p>
+                                    <p class="text-sm font-semibold text-white">PKR 4,500</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="social-media" class="tab-pane hidden">
+                    <div class="bg-gray-700 rounded-lg p-6">
+                              <p class="text-gray-300 mb-4">This charge covers two months of social media content posting and management services, including a PKR 5,000 discount.</p>
+                        <dl class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <dt class="text-sm text-gray-300">Monthly Services (2 months @ 25,000)</dt>
+                                <dd class="text-sm font-medium text-white">PKR 50,000</dd>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <dt class="text-sm text-gray-300">Discount</dt>
+                                <dd class="text-sm font-medium text-red-400">- PKR 5,000</dd>
+                            </div>
+                            <div class="flex items-center justify-between border-t border-gray-600 pt-4">
+                                <dt class="text-sm font-bold text-white">Subtotal</dt>
+                                <dd class="text-sm font-bold text-white">PKR 45,000</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-8 md:mt-12 bg-gray-800 p-6 md:p-8 rounded-2xl shadow-sm border border-gray-700">
+            <h3 class="text-xl font-bold text-center text-white mb-6">Payment Instructions</h3>
+            <div class="max-w-md mx-auto bg-gray-700 p-6 rounded-lg">
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-300">Bank:</span>
+                        <span class="text-sm font-semibold text-white">Bank Al Habib</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-300">Account Holder:</span>
+                        <span class="text-sm font-semibold text-white">MANSOOR ANWAR KHAN</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-300">Account Number:</span>
+                        <span id="account-number" class="text-sm font-semibold text-white">10170981028974018</span>
+                    </div>
+                </div>
+                <button id="copy-button" class="mt-6 w-full bg-[#ffd051] text-gray-900 py-2.5 px-4 rounded-lg text-sm font-semibold hover:bg-[#e6bb45] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffd051] transition-all">
+                    Copy Account Number
+                </button>
+                <p id="copy-feedback" class="text-center text-green-400 text-xs mt-2 h-4"></p>
+                <button id="email-button" class="mt-4 w-full bg-blue-500 text-white py-2.5 px-4 rounded-lg text-sm font-semibold hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                    Send Email Reminder
+                </button>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const invoiceData = {
+                fullProduction: {
+                    total: 50000,
+                    cars: [
+                        { name: 'Lexus LX570', cost: 5000 },
+                        { name: 'Lexus LX600', cost: 5000 },
+                        { name: 'Toyota LC 300', cost: 5000 },
+                        { name: 'Toyota LC Prado', cost: 5000 },
+                        { name: 'Honda Vezel', cost: 5000 },
+                        { name: 'Honda Insight', cost: 5000 },
+                        { name: 'Suzuki Alto (x2)', cost: 10000 },
+                        { name: 'Daihatsu Mira', cost: 5000 },
+                        { name: 'Audi E-tron', cost: 5000 },
+                    ]
+                },
+                photoOnly: { total: 4500 },
+                socialMedia: { total: 45000 },
+            };
+
+            const ctx = document.getElementById('invoiceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Full Production', 'Photo-Only Services', 'Social Media'],
+                    datasets: [{
+                        data: [
+                            invoiceData.fullProduction.total,
+                            invoiceData.photoOnly.total,
+                            invoiceData.socialMedia.total
+                        ],
+                        backgroundColor: ['#ffd051', '#e6bb45', '#ccaa3a'], /* Shades of new yellow */
+                        borderColor: '#1a1a1a', /* Dark background for border */
+                        borderWidth: 4,
+                        hoverOffset: 12,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14,
+                                    family: "'Inter', sans-serif"
+                                },
+                                color: '#f5f5f5' /* Light text for legend */
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PKR' }).format(context.parsed);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const fullProductionTbody = document.querySelector('#full-production tbody');
+            invoiceData.fullProduction.cars.forEach(car => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${car.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">PKR ${car.cost.toLocaleString()}</td>
+                `;
+                fullProductionTbody.appendChild(row);
+            });
+            const totalRow = document.createElement('tr');
+            totalRow.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">Subtotal</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white text-right">PKR ${invoiceData.fullProduction.total.toLocaleString()}</td>
+            `;
+            fullProductionTbody.appendChild(totalRow);
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('tab-inactive');
+                    });
+                    button.classList.add('tab-active');
+                    button.classList.remove('tab-inactive');
+
+                    tabPanes.forEach(pane => {
+                        if (pane.id === button.dataset.tab) {
+                            pane.classList.remove('hidden');
+                        } else {
+                            pane.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+            
+            const copyButton = document.getElementById('copy-button');
+            const accountNumber = document.getElementById('account-number').innerText;
+            const copyFeedback = document.getElementById('copy-feedback');
+            copyButton.addEventListener('click', () => {
+                const tempInput = document.createElement('input');
+                document.body.appendChild(tempInput);
+                tempInput.value = accountNumber;
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                
+                copyFeedback.textContent = 'Copied to clipboard!';
+                setTimeout(() => {
+                    copyFeedback.textContent = '';
+                }, 2000);
+            });
+
+            const emailButton = document.getElementById('email-button');
+            emailButton.addEventListener('click', () => {
+                const subject = encodeURIComponent('Invoice Reminder for Autocentre');
+                const body = encodeURIComponent(`Dear Autocentre,\n\nThis is a friendly reminder that your invoice (PKR 99,500) is due. You can view the full details at your convenience.\n\nThank you for your business.\n\nSincerely,\nSK Productions`);
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            });
+        });
+    </script>
+</body>
+</html>
