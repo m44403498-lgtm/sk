@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>300 MCQs — Humanities, Philosophy &amp; Reasoning</title>
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#eef1f8;
+    color:#1b2333;
+    line-height:1.55;
+  }
+  header.topbar{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(135deg,#1e3a8a,#4c1d95);
+    color:#fff;padding:12px 18px;
+    display:flex;flex-wrap:wrap;gap:10px 22px;
+    align-items:center;justify-content:space-between;
+    box-shadow:0 3px 14px rgba(0,0,0,.25);
+  }
+  .brand{font-weight:700;font-size:1.02rem;letter-spacing:.3px}
+  .brand span{font-weight:400;opacity:.8;font-size:.85rem;display:block}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:.85rem}
+  .pill{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.25);
+    padding:5px 12px;border-radius:999px;white-space:nowrap;
+  }
+  .pill b{font-size:.95rem}
+  .pill.good{background:rgba(22,163,74,.35);border-color:rgba(22,163,74,.6)}
+  .pill.bad{background:rgba(220,38,38,.35);border-color:rgba(220,38,38,.6)}
+  button.reset{
+    background:#fff;color:#1e3a8a;border:none;font-weight:700;
+    padding:7px 16px;border-radius:999px;cursor:pointer;font-size:.85rem;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  button.reset:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+
+  main{max-width:960px;margin:0 auto;padding:22px 16px 90px}
+
+  .intro{
+    background:#fff;border-radius:14px;padding:18px 20px;margin-bottom:22px;
+    box-shadow:0 2px 10px rgba(30,58,138,.08);
+    border-left:6px solid #4c1d95;
+  }
+  .intro h1{margin:0 0 8px;font-size:1.25rem;color:#1e3a8a}
+  .intro p{margin:4px 0;font-size:.9rem;color:#44506b}
+
+  section.section{margin-bottom:34px}
+  section.section > h2{
+    font-size:1.02rem;color:#4c1d95;
+    background:#e7e2fa;border-radius:10px;
+    padding:10px 14px;margin:0 0 14px;
+    border-left:5px solid #7c3aed;
+  }
+
+  .q{
+    background:#fff;border-radius:12px;padding:15px 17px;margin-bottom:13px;
+    box-shadow:0 2px 8px rgba(30,58,138,.07);
+    border:1px solid #e3e8f5;
+    transition:box-shadow .15s ease;
+  }
+  .q.answered{border-color:#cbd5e1}
+  .qtext{
+    margin:0 0 11px;font-weight:600;font-size:.95rem;color:#16203a;
+    display:flex;gap:8px;
+  }
+  .num{
+    flex:0 0 auto;color:#4c1d95;font-weight:800;
+    background:#ede9fe;border-radius:6px;padding:0 7px;height:fit-content;
+    font-size:.82rem;line-height:1.5;
+  }
+
+  .opts{display:flex;flex-direction:column;gap:7px}
+  .opt{
+    text-align:left;width:100%;
+    background:#f7f9fd;border:1.5px solid #dde4f2;border-radius:9px;
+    padding:9px 12px;font-size:.88rem;color:#25314d;cursor:pointer;
+    font-family:inherit;display:flex;gap:9px;align-items:flex-start;
+    transition:background .13s ease,border-color .13s ease,transform .1s ease;
+  }
+  .opt:hover:not(:disabled){background:#eef3ff;border-color:#a5b4fc;transform:translateX(2px)}
+  .opt:disabled{cursor:default}
+  .letter{
+    flex:0 0 auto;font-weight:800;color:#4c1d95;font-size:.82rem;
+    background:#ede9fe;border-radius:5px;padding:0 6px;line-height:1.55;
+  }
+  .opt.correct{background:#16a34a;border-color:#15803d;color:#fff}
+  .opt.correct .letter{background:rgba(255,255,255,.25);color:#fff}
+  .opt.wrong{background:#dc2626;border-color:#b91c1c;color:#fff}
+  .opt.wrong .letter{background:rgba(255,255,255,.25);color:#fff}
+  .opt.dim{opacity:.55}
+
+  .feedback{
+    margin-top:9px;font-size:.83rem;font-weight:700;display:none;
+  }
+  .feedback.show{display:block}
+  .feedback.ok{color:#15803d}
+  .feedback.no{color:#b91c1c}
+
+  footer.done{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#1e3a8a;color:#fff;text-align:center;
+    padding:9px 14px;font-size:.85rem;font-weight:600;
+    box-shadow:0 -3px 12px rgba(0,0,0,.2);
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    300 MCQs — Humanities, Philosophy &amp; Reasoning
+    <span>Click an option — green = correct, red = wrong</span>
+  </div>
+  <div class="stats">
+    <div class="pill good">Score: <b id="score">0</b></div>
+    <div class="pill bad">Wrong: <b id="wrong">0</b></div>
+    <div class="pill">Answered: <b id="answered">0</b> / <b id="total">300</b></div>
+    <button class="reset" onclick="location.reload()">Reset All</button>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Interactive Revision Test</h1>
+    <p>Section A: Philosophy topics (100 questions) &nbsp;•&nbsp; Section B: All other topics (200 questions).</p>
+    <p>When you pick an answer, the correct option turns <b style="color:#15803d">green</b> and a wrong pick turns <b style="color:#b91c1c">red</b>. The correct option is always revealed.</p>
+  </div>
+  <div id="quiz"></div>
+</main>
+
+<footer class="done" id="footer">Progress: 0 / 300 answered &nbsp;|&nbsp; Score: 0</footer>
+
+<script>
+/* ============================================================
+   DATA
+   Format: [ questionText, [optionA, optionB, optionC, optionD], correctIndex ]
+   ============================================================ */
+const DATA = [
+
+/* ---------- SECTION A1 : WHAT IS PHILOSOPHY (50) ---------- */
+{
+title:"Section A1 — What is Philosophy? (Lecture 7 &amp; 8)",
+qs:[
+[`The word "philosophy" originates from which language?`,["Latin","Sanskrit","Greek","Arabic"],2],
+[`What does "philo" mean in Greek?`,["Wisdom","Knowledge","Truth","Love"],3],
+[`What does "sophia" mean in Greek?`,["Love","Wisdom","Knowledge","Truth"],1],
+[`Philosophy literally translates to:`,["Love of knowledge","Search for truth","Love of wisdom","Pursuit of happiness"],2],
+[`A philosopher is someone who:`,["Claims ultimate knowledge","Rejects all beliefs","Only studies ancient texts","Actively seeks understanding and truth"],3],
+[`Which of the following is NOT a characteristic of philosophy?`,["Systematic","Dogmatic","Critical","Reflective"],1],
+[`Philosophy is described as:`,["Unorganized thinking","Blind faith","Organized, structured reasoning","Emotional response"],2],
+[`The critical aspect of philosophy involves:`,["Accepting all claims","Examining foundations and implications","Avoiding questions","Memorizing facts"],1],
+[`Reflective thinking in philosophy means:`,["Quick decision making","Ignoring problems","Following traditions","Deep contemplation of ideas"],3],
+[`Which is a fundamental question of philosophy?`,["What is the capital of France?","What is reality?","How to cook rice?","What time is it?"],1],
+[`"What can we know?" is a question about:`,["Metaphysics","Ethics","Epistemology","Aesthetics"],2],
+[`"How should we live?" is a question about:`,["Logic","Ethics","Metaphysics","Epistemology"],1],
+[`"What is truth?" investigates:`,["How to win arguments","Mathematical proofs","Scientific methods","The nature of truth and justification"],3],
+[`Thales asked what question?`,["What is beauty?","What is the basic substance of the universe?","How should we govern?","What is knowledge?"],1],
+[`Who systematized philosophical inquiry into branches?`,["Socrates","Thales","Plato and Aristotle","Descartes"],2],
+[`The shift from myth-based explanations to reason-based understanding is called:`,["Logos to Mythos","Faith to Science","Chaos to Order","Mythos to Logos"],3],
+[`The Socratic Method emphasizes:`,["Providing answers","Asking probing questions","Memorizing facts","Accepting authority"],1],
+[`Socrates believed wisdom begins with:`,["Knowledge","Power","Ignorance","Wealth"],2],
+[`The Socratic Method encourages:`,["Blind obedience","Emotional decisions","Superficial learning","Critical thinking"],3],
+[`Which is NOT part of the Socratic Method?`,["Asking probing questions","Challenging assumptions","Encouraging dialogue","Accepting all claims"],3],
+[`Philosophy sharpens critical thinking by teaching us to:`,["Accept all arguments","Analyze arguments and identify assumptions","Avoid questioning","Memorize theories"],1],
+[`Physics originated as:`,["Social science","Art form","Natural philosophy","Religious practice"],2],
+[`Psychology originated from the study of:`,["Matter","Mind and soul","Government","Language"],1],
+[`Political Science originated from questions about:`,["Beauty","Matter","Numbers","Justice and governance"],3],
+[`Linguistics deals with:`,["Matter and energy","Meaning and logic","Government","Art"],1],
+[`Philosophy helps individuals reflect on:`,["Only academic topics","Mathematical equations","Moral values and meaning of life","Physical phenomena"],2],
+[`Philosophy teaches us:`,["What to think","What to believe","What to reject","How to think"],3],
+[`Media ethics involves:`,["Ignoring truth","Evaluating truth and responsibility","Spreading misinformation","Avoiding accountability"],1],
+[`Technology assessment in philosophy involves:`,["Ignoring impact","Maximizing profit","Assessing impact on humanity","Avoiding ethical considerations"],2],
+[`Social justice examines:`,["Only legal issues","Fairness and equality","Economic growth","Political power"],1],
+[`Philosophical ideas shape:`,["Only academic discussions","Only individual opinions","Cultures, ideologies, and constitutions","Only scientific research"],2],
+[`Democracy as a concept has roots in:`,["Mathematics","Chemistry","Biology","Philosophy"],3],
+[`Justice as a concept has roots in:`,["Physics","Philosophy","Geology","Astronomy"],1],
+[`Human rights as a concept has roots in:`,["Engineering","Chemistry","Philosophy","Biology"],2],
+[`Equality as a concept has roots in:`,["Mathematics","Physics","Chemistry","Philosophy"],3],
+[`According to the lecture, philosophy is:`,["Merely an academic subject","A dead discipline","A way of life","Only for intellectuals"],2],
+[`Philosophy is grounded in:`,["Blind faith","Questioning and reasoning","Emotional responses","Tradition only"],1],
+[`The pursuit of wisdom involves:`,["Never asking questions","Accepting all claims","Seeking understanding","Avoiding reflection"],2],
+[`Which learning outcome involves recognizing philosophy as a reflective discipline?`,["Appreciation","Curiosity","Critical Thinking","Understanding"],3],
+[`Which learning outcome involves valuing historical roots?`,["Understanding","Appreciation","Curiosity","Critical Thinking"],1],
+[`Which learning outcome involves developing interest in fundamental questions?`,["Understanding","Appreciation","Curiosity","Critical Thinking"],2],
+[`Which learning outcome involves questioning assumptions?`,["Understanding","Appreciation","Curiosity","Critical Thinking"],3],
+[`Philosophy demands we ask not just what we believe, but:`,["Who believes it","Why and whether our reasons hold up","When it was believed","Where it was believed"],1],
+[`Systematic inquiry in philosophy means:`,["Random thinking","Accepting all opinions","Moving beyond opinion toward justified truth","Avoiding questions"],2],
+[`The search for truth in philosophy demands:`,["Accepting authority","Avoiding questioning","Following tradition","Examining whether our reasons hold up"],3],
+[`Which ancient philosopher asked about the basic substance of the universe?`,["Socrates","Thales","Plato","Aristotle"],1],
+[`Socrates taught through:`,["Lectures","Writing books","Questioning","Performing rituals"],2],
+[`"Why do you believe this?" is an example of:`,["Blind faith","Emotional appeal","Superficial learning","Socratic questioning"],3],
+[`"Can this belief be challenged?" encourages:`,["Dogmatism","Critical examination","Blind obedience","Emotional decisions"],1],
+[`Philosophy is described as:`,["A modern invention","A dead discipline","An ancient art of questioning","Only for academics"],2]
+]},
+
+/* ---------- SECTION A2 : BRANCHES & FALLACIES (50) ---------- */
+{
+title:"Section A2 — Branches of Philosophy &amp; Logical Fallacies (Lecture 9 &amp; 10)",
+qs:[
+[`How many primary pillars/branches of philosophy are there?`,["Two","Three","Five","Four"],3],
+[`Which is NOT one of the four primary branches of philosophy?`,["Metaphysics","Epistemology","Psychology","Logic"],2],
+[`Metaphysics is the study of:`,["Knowledge","Reality","Values","Reasoning"],1],
+[`Metaphysics asks:`,["What can we know?","How should we live?","What is real?","What is beauty?"],2],
+[`Which question is NOT related to metaphysics?`,["Does God exist?","What is the relationship between mind and body?","How do we define space and time?","How should we govern?"],3],
+[`Epistemology is the theory of:`,["Reality","Values","Knowledge","Beauty"],2],
+[`Epistemology examines:`,["The nature of being","Moral principles","Artistic value","The limits and foundations of human cognition"],3],
+[`Rationalism holds that knowledge comes from:`,["Sensory experience","Reason and logic","Emotion","Tradition"],1],
+[`Empiricism holds that knowledge comes from:`,["Reason alone","Innate ideas","Sensory experience and observation","Pure logic"],2],
+[`Which philosopher is associated with Rationalism?`,["Locke","Hume","Aristotle","Descartes"],3],
+[`Which philosopher is associated with Empiricism?`,["Plato","Locke","Descartes","Socrates"],1],
+[`A priori truths are associated with:`,["Empiricism","Skepticism","Rationalism","Relativism"],2],
+[`A posteriori truths are associated with:`,["Rationalism","Empiricism","Innatism","Idealism"],1],
+[`Axiology is the study of:`,["Reality","Knowledge","Reasoning","Value"],3],
+[`Axiology bridges:`,["Science and religion","Moral philosophy and philosophy of art","Logic and mathematics","Physics and chemistry"],1],
+[`Ethics deals with:`,["What is beautiful","What is real","What is right and wrong","What is knowledge"],2],
+[`Aesthetics deals with:`,["What is right and wrong","What is real","What is knowledge","The nature of beauty and artistic value"],3],
+[`Logic provides:`,["Emotional responses","Formal tools to evaluate arguments","Moral principles","Aesthetic judgments"],1],
+[`Deductive reasoning moves from:`,["Specific to general","Particular to particular","General to specific","Random to organized"],2],
+[`Inductive reasoning moves from:`,["General to specific","Specific to general","Universal to particular","Abstract to concrete"],1],
+[`Deductive reasoning guarantees conclusions if:`,["The premises are popular","Many people believe them","They feel right","The premises are true and logic is valid"],3],
+[`Inductive reasoning produces:`,["Certain conclusions","Probable conclusions","Absolute truths","Mathematical proofs"],1],
+[`Ad Hominem means:`,["Against the argument","Against the evidence","Against the person","Against the truth"],2],
+[`Ad Hominem attacks:`,["The argument's logic","The person's character","The evidence presented","The conclusion"],1],
+[`Straw Man fallacy involves:`,["Attacking the person","Appealing to popularity","Misrepresenting an argument to make it easier to attack","Using insufficient evidence"],2],
+[`Bandwagon fallacy is also known as:`,["Ad Hominem","Straw Man","False Dilemma","Appeal to Popularity"],3],
+[`Bandwagon fallacy asserts something is true because:`,["It is logical","Many people believe it","Evidence supports it","Experts agree"],1],
+[`False Dilemma presents:`,["All possible options","No options","Only two extreme options","Multiple nuanced options"],2],
+[`Which fallacy involves attacking a distorted version of an argument?`,["Ad Hominem","Straw Man","False Dilemma","Bandwagon"],1],
+[`Which fallacy involves personal attacks instead of addressing the argument?`,["Straw Man","False Dilemma","Ad Hominem","Bandwagon"],2],
+[`Which fallacy involves "everyone believes it, so it must be true"?`,["Ad Hominem","Straw Man","False Dilemma","Bandwagon"],3],
+[`Which fallacy involves "either you're with us or against us"?`,["Ad Hominem","Straw Man","False Dilemma","Bandwagon"],2],
+[`Logical fallacies are:`,["Valid arguments","Errors in reasoning","Strong evidence","Proven facts"],1],
+[`Fallacies undermine:`,["The popularity of an argument","The length of an argument","The validity of an argument","The emotional appeal of an argument"],2],
+[`A fallacious argument might sound convincing but is:`,["Logically valid","Empirically proven","Mathematically sound","Logically defective"],3],
+[`Studying fallacies helps in:`,["Making weaker arguments","Critical evaluation of arguments","Avoiding logic","Accepting all claims"],1],
+[`Recognizing fallacies helps identify:`,["Truth","Beauty","Deception","Knowledge"],2],
+[`Which philosopher is associated with Rationalism along with Descartes?`,["Hume","Locke","Aristotle","Plato"],3],
+[`Which philosopher is associated with Empiricism along with Locke?`,["Plato","Hume","Descartes","Socrates"],1],
+[`Innate ideas are associated with:`,["Empiricism","Skepticism","Rationalism","Materialism"],2],
+[`Sensory data is associated with:`,["Rationalism","Idealism","Dualism","Empiricism"],3],
+[`The study of being and existence is:`,["Epistemology","Metaphysics","Axiology","Logic"],1],
+[`The study of the nature of beauty is:`,["Ethics","Metaphysics","Aesthetics","Epistemology"],2],
+[`The study of moral principles is:`,["Aesthetics","Logic","Metaphysics","Ethics"],3],
+[`"What is the meaning of a good life?" is a question of:`,["Metaphysics","Epistemology","Ethics","Logic"],2],
+[`Which branch provides tools to test truth claims?`,["Metaphysics","Aesthetics","Ethics","Logic"],3],
+[`"You cannot trust his opinion because he is poor" is an example of:`,["Straw Man","Ad Hominem","False Dilemma","Bandwagon"],1],
+[`"We should reduce homework" → "So you think students should never study!" is:`,["Ad Hominem","Bandwagon","Straw Man","False Dilemma"],2],
+[`"Either you support this policy or you don't care about the country" is:`,["Ad Hominem","Straw Man","Bandwagon","False Dilemma"],3],
+[`"Millions of people use this product, so it must be the best" is:`,["Ad Hominem","Straw Man","False Dilemma","Bandwagon"],3]
+]},
+
+/* ---------- SECTION B1 : REASONING & CRITICAL THINKING (40) ---------- */
+{
+title:"Section B1 — Reasoning &amp; Critical Thinking (Lecture 12 &amp; 13a)",
+qs:[
+[`Reasoning is the bridge between:`,["Ignorance and knowledge","Existing knowledge and new conclusions","Emotion and logic","Facts and opinions"],1],
+[`Reasoning involves integration of:`,["Only emotions","Only opinions","Information, facts, observations, and logical principles","Only beliefs"],2],
+[`Deductive reasoning applies:`,["Specific cases to general rules","General rules to specific cases","Random observations to theories","Emotions to decisions"],1],
+[`Deductive reasoning is described as:`,["Bottom-up","Random","Top-down","Circular"],2],
+[`In deduction, if premises are true and logic is valid, the conclusion is:`,["Probable","Uncertain","Unknown","Guaranteed true"],3],
+[`A standard deductive argument consists of:`,["Two conclusions","Major premise, minor premise, and conclusion","Only observations","Only generalizations"],1],
+[`Major premise is:`,["A specific statement","The conclusion","A general statement or established principle","An observation"],2],
+[`Minor premise is:`,["A general statement","A specific statement about a particular case","The conclusion","A theory"],1],
+[`Deduction offers:`,["Probability","Uncertainty","Ambiguity","Certainty"],3],
+[`Deduction relies on:`,["New observations","Established rules","Random guesses","Emotions"],1],
+[`"All humans are mortal; Socrates is human; therefore, Socrates is mortal" is:`,["Inductive reasoning","Fallacious reasoning","Deductive reasoning","Emotional reasoning"],2],
+[`Inductive reasoning builds:`,["Specific conclusions from general rules","Certain conclusions","Mathematical proofs","General conclusions from specific observations"],3],
+[`Inductive reasoning offers:`,["Certainty","Probability","Absolute truth","Mathematical proof"],1],
+[`Inductive reasoning is the foundation of:`,["Mathematics","Logic","Scientific method","Philosophy"],2],
+[`The logical sequence of induction is:`,["General → Specific → Conclusion","Specific Observations → Pattern Recognition → General Conclusion","Conclusion → Premises","Rule → Application"],1],
+[`"The sun rose yesterday and today; therefore, it will likely rise tomorrow" is:`,["Deductive reasoning","Fallacious reasoning","Circular reasoning","Inductive reasoning"],3],
+[`Induction measures:`,["Certainty","The strength of evidence","Mathematical precision","Emotional appeal"],1],
+[`Deduction direction is:`,["Specific to General","Random","General to Specific","Circular"],2],
+[`Induction direction is:`,["General to Specific","Specific to General","Circular","Random"],1],
+[`Deduction goal is to:`,["Develop a new rule","Create a theory","Apply an existing rule","Make observations"],2],
+[`Induction goal is to:`,["Apply an existing rule","Prove certainty","Test logic","Develop a new rule/generalization"],3],
+[`The memory device for deduction is:`,["INDUCTION = UP","DEDUCTION = DOWN","DEDUCTION = UP","INDUCTION = DOWN"],1],
+[`The memory device for induction is:`,["INDUCTION = DOWN","DEDUCTION = UP","INDUCTION = UP","INDUCTION = SIDEWAYS"],2],
+[`Words like "all" or "every" suggest:`,["Induction","Fallacy","Deduction","Emotion"],2],
+[`Words like "observed" suggest:`,["Deduction","Fallacy","Certainty","Induction"],3],
+[`Critical thinking involves:`,["Accepting all claims","Asking specific questions to evaluate claims","Avoiding analysis","Following authority"],1],
+[`The first question in critical thinking checklist is:`,["What is the evidence?","Is there a fallacy?","What is the claim?","Is the reasoning logical?"],2],
+[`The second question in critical thinking checklist is:`,["What is the claim?","What is the evidence?","Is there a fallacy?","Is the reasoning logical?"],1],
+[`The third question in critical thinking checklist is:`,["What is the claim?","Is there a fallacy?","Is the evidence sufficient?","What is the evidence?"],2],
+[`The fourth question in critical thinking checklist is:`,["What is the claim?","Is the reasoning logical?","What is the evidence?","Is there a fallacy?"],1],
+[`The fifth question in critical thinking checklist is:`,["What is the claim?","What is the evidence?","Is the evidence sufficient?","Is there a fallacy?"],3],
+[`Hasty Generalization involves:`,["Sufficient evidence","Popularity","Broad claim based on small sample","Personal attack"],2],
+[`Appeal to Popularity claims something is true because:`,["Evidence supports it","Experts agree","Logic proves it","Many people believe it"],3],
+[`"Two students were late; therefore, all students are irresponsible" is:`,["Ad Hominem","Hasty Generalization","Straw Man","False Dilemma"],1],
+[`The flaw in Hasty Generalization is:`,["Too much evidence","Too many experts","A few examples cannot represent a whole group","Perfect logic"],2],
+[`The flaw in Appeal to Popularity is:`,["Popularity equals truth","Numbers prove truth","Majority is always right","Popularity is not a measure of truth"],3],
+[`Good reasoning requires:`,["Popularity","Sufficient evidence and factual support","Emotional appeal","Personal attacks"],1],
+[`The core formula of good reasoning is:`,["Emotion connects evidence to conclusion","Popularity determines truth","Good reasoning connects evidence to conclusion logically","Authority determines truth"],2],
+[`Critical thinking checks if:`,["The argument is popular","The speaker is famous","The conclusion is emotional","The connection between evidence and conclusion is real"],3],
+[`Deductive reasoning example:`,["Observed 100 white swans → All swans are white","All birds have feathers; robin is a bird; therefore, robin has feathers","Every time I eat peanuts, I get rash → I am allergic","Two students late → All irresponsible"],1]
+]},
+
+/* ---------- SECTION B2 : HUMANITIES IN EVERYDAY LIFE (30) ---------- */
+{
+title:"Section B2 — Humanities in Everyday Life (Lecture 3)",
+qs:[
+[`Humanities extends:`,["Only to academic texts","Far beyond academic texts and classrooms","Only to museums","Only to libraries"],1],
+[`Humanities shapes:`,["Only academic decisions","Only career choices","Every small and significant decision we make","Only political decisions"],2],
+[`Whenever you choose, you are using:`,["Only logic","Only emotions","Only science","Humanities"],3],
+[`Which is an example of right vs wrong decision?`,["Choosing what to wear","Telling truth vs lying","Choosing music","Selecting art"],1],
+[`Which is an example of taste and beauty decision?`,["Telling truth","Standing up for fairness","Choosing appropriate clothing","Being honest"],2],
+[`Which is an example of communication choice?`,["Choosing what to eat","Soft words vs harsh tone","Selecting art","Choosing music"],1],
+[`Ethics tells us:`,["What is beautiful","What is real","What is logical","What we should do"],3],
+[`Ethics is described as:`,["Outer voice","Inner voice that guides our actions","Social media trend","Academic theory"],1],
+[`Honesty involves:`,["Cheating on exams","Sharing false information","Not cheating and building trust through truthfulness","Avoiding responsibility"],2],
+[`Fairness involves:`,["Prejudice and bias","Discrimination","Favoritism","Giving others equal opportunities"],3],
+[`Responsibility involves:`,["Ignoring consequences","Standing by our words and actions","Avoiding accountability","Blaming others"],1],
+[`Language has power to:`,["Only inform","Only entertain","Hurt or heal, inspire or discourage","Only confuse"],2],
+[`Media influences:`,["Only entertainment","Only fashion","Only politics","Opinions and preferences"],3],
+[`Headlines shape:`,["Only news","How we think","Only entertainment","Only sports"],1],
+[`Art exists:`,["Only in museums","Only in galleries","Everywhere around us","Only in textbooks"],2],
+[`Advertisements combine:`,["Only information","Only entertainment","Only education","Persuasion with beauty"],3],
+[`Architecture is designed with:`,["Only function","Artistic vision","Only cost","Only materials"],1],
+[`Social media visuals shape:`,["Only entertainment","Only news","How we see ourselves","Only education"],2],
+[`Sharing fake news without verifying is:`,["Ethical","Neutral","Required","Unethical"],3],
+[`Plagiarism involves:`,["Original work","Copying someone's work and submitting as your own","Proper citation","Collaboration"],1],
+[`Academic honesty is important because:`,["It is easy","It is optional","It builds trust and integrity","It saves time"],2],
+[`Which humanities aspects are involved in fake news?`,["Only ethics","Ethics, media literacy, responsibility","Only media literacy","Only responsibility"],1],
+[`Who influences your thinking more: family, media, or education?`,["Only family","Only media","Only education","All can influence"],3],
+[`Humanities teaches us:`,["Only facts","How we make everyday choices","Only theories","Only history"],1],
+[`Values play a role in:`,["Only major decisions","Only career choices","Everyday decisions","Only political decisions"],2],
+[`Not sharing false information online is an example of:`,["Dishonesty","Irresponsibility","Unfairness","Honesty"],3],
+[`Avoiding prejudice and bias is an example of:`,["Dishonesty","Fairness","Irresponsibility","Dishonesty"],1],
+[`Being mindful of online behavior is an example of:`,["Dishonesty","Unfairness","Responsibility","Irresponsibility"],2],
+[`Words can:`,["Only inform","Only entertain","Only confuse","Wound deeply or encourage and uplift"],3],
+[`Dramas show:`,["Only entertainment","Stereotypes","Only news","Only sports"],1]
+]},
+
+/* ---------- SECTION B3 : VISUAL COMPOSITION (25) ---------- */
+{
+title:"Section B3 — Elements of Visual Composition (Lecture 5)",
+qs:[
+[`How many fundamental building blocks of visual composition are there?`,["Four","Five","Six","Seven"],2],
+[`Which is NOT an element of visual composition?`,["Points","Lines","Emotions","Color"],2],
+[`Points are described as:`,["Complex shapes","Small areas of interest","Large areas","Background elements"],1],
+[`Points have:`,["No effect","Only color","Gravity, drawing the viewer's eye","Only texture"],2],
+[`Lines are:`,["Areas of interest","3D representations","Surface qualities","Paths for the eye to follow"],3],
+[`Lines can be:`,["Only visible","Imaginary","Only straight","Only curved"],1],
+[`Shapes are:`,["3D representations","Paths","2D enclosed areas","Points"],2],
+[`A circle feels:`,["Dynamic","Aggressive","Chaotic","Peaceful"],3],
+[`A triangle feels:`,["Peaceful","Dynamic","Calm","Gentle"],1],
+[`Forms give:`,["2D representation","Only color","3D representation","Only texture"],2],
+[`Form transforms a circle into:`,["A triangle","A line","A point","A sphere"],3],
+[`Form transforms a triangle into:`,["A circle","A pyramid","A line","A point"],1],
+[`Texture shapes:`,["Only appearance","Only color","Emotional impact","Only form"],2],
+[`Smooth pebbles evoke:`,["Power","Chaos","Aggression","Calm"],3],
+[`Jagged mountains feel:`,["Calm","Powerful","Gentle","Peaceful"],1],
+[`Warm colors include:`,["Blue, green, violet","Black, white, gray","Red, orange, yellow","Only red"],2],
+[`Cool colors include:`,["Red, orange, yellow","Green, blue, violet","Only blue","Only green"],1],
+[`Warm colors are:`,["Calm and gentle","Passive","Active and exciting","Neutral"],2],
+[`Cool colors are:`,["Active and exciting","Aggressive","Dynamic","Calm and gentle"],3],
+[`Pairing warm and cool colors creates:`,["Confusion","Eye-catching contrast","Monotony","Chaos"],1],
+[`Photos with one or two dominant colors deliver:`,["Confusion","Chaos","Unified, powerful message","Disorder"],2],
+[`Black and white emphasizes:`,["Only color","Only shape","Only points","Form, texture, and light"],3],
+[`Points do what?`,["Connect","Attract","Define","Feel"],1],
+[`Lines do what?`,["Attract","Define","Connect","Feel"],2],
+[`Shapes and forms do what?`,["Attract","Connect","Feel","Define"],3]
+]},
+
+/* ---------- SECTION B4 : ARTS, SOCIETY & CULTURE (40) ---------- */
+{
+title:"Section B4 — Arts, Society &amp; Culture (Lecture 2 &amp; 4)",
+qs:[
+[`Art is:`,["Only painting","Creative expression conveying ideas, emotions, and experiences","Only music","Only sculpture"],1],
+[`In art, we use imagination to:`,["Avoid reality","Copy others","Discover connections among different things","Follow rules"],2],
+[`The observer experiences:`,["Boredom","Confusion","Anger","Pleasant surprise or delight"],3],
+[`Visual art includes:`,["Only painting","Painting, sculpture, photography, calligraphy","Only sculpture","Only photography"],1],
+[`Literary art includes:`,["Only novels","Only poetry","Poetry, novels, short stories, plays","Only plays"],2],
+[`Performing art includes:`,["Only music","Only dance","Only theater","Drama, theater, dance, music"],3],
+[`Art is born from:`,["Isolation","Society","Only individual genius","Only academic training"],1],
+[`Art reflects:`,["Only beauty","Only politics","The spirit, struggles, and achievements of its time","Only religion"],2],
+[`Art shapes society by:`,["Maintaining status quo","Avoiding controversy","Following tradition","Challenging norms and sparking dialogue"],3],
+[`Culture includes:`,["Only language","Beliefs, traditions, values, language, clothing, rituals","Only traditions","Only beliefs"],1],
+[`Pakistani example of cultural value:`,["Punctuality","Individualism","Hospitality","Efficiency"],2],
+[`Western example of cultural value:`,["Hospitality","Punctuality","Collectivism","Tradition"],1],
+[`Art is the mirror of:`,["Individual","Nature","Universe","Society"],3],
+[`Partition Literature deals with:`,["Mughal culture","Trauma of 1947 migration","Family systems","Gender roles"],1],
+[`Mughal Paintings depict:`,["Partition trauma","Family systems","Royal culture and imperial power","Gender roles"],2],
+[`TV Dramas address:`,["Only entertainment","Only politics","Only religion","Family systems, gender roles, social pressure"],3],
+[`Resistance Literature is:`,["Writing for entertainment","Writing against oppression and injustice","Writing for profit","Writing for fame"],1],
+[`Protest Art includes:`,["Only paintings","Only sculpture","Graffiti, posters, murals","Only music"],2],
+[`Revolutionary Poetry is:`,["Voice of tradition","Voice of entertainment","Voice of commerce","Voice of rebellion and hope"],3],
+[`Art raises questions by:`,["Maintaining status quo","Challenging the status quo","Avoiding controversy","Following authority"],1],
+[`Art challenges power by:`,["Supporting authority","Avoiding politics","Questioning authority and holding leaders accountable","Following orders"],2],
+[`Art amplifies voices by:`,["Silencing marginalized communities","Supporting only elite voices","Avoiding diversity","Giving platform to silent and marginalized communities"],3],
+[`Faiz Ahmed Faiz was:`,["A painter","A revolutionary poet","A sculptor","A musician"],1],
+[`Faiz's poetry challenged:`,["Only tradition","Only religion","Authoritarianism, imprisonment, and exile","Only culture"],2],
+[`Truck Art is:`,["Elite art","Academic art","Western art","Popular folk art transforming vehicles"],3],
+[`Truck Art expresses:`,["Only commercial messages","Identity, joy, and pride","Only religious messages","Only political messages"],1],
+[`Pakistani TV Dramas address:`,["Only entertainment","Only politics","Women's issues, family dynamics, social pressures","Only religion"],2],
+[`Art should serve:`,["Only beauty","Only resistance","Neither","Both beauty and resistance"],3],
+[`Art gives silent voices:`,["No platform","Courage to speak","No representation","No recognition"],1],
+[`Art makes it impossible to ignore:`,["Pleasant truths","Only beauty","Uncomfortable truths","Only entertainment"],2],
+[`To view art, we should identify:`,["Only colors","Only price","Only artist","The message"],3],
+[`To view art, we should consider:`,["Only beauty","The audience","Only size","Only medium"],1],
+[`To view art, we should connect it to:`,["Only artist's life","Only art history","Society","Only market value"],2],
+[`Art is open to:`,["Only one interpretation","No interpretation","Only expert interpretation","Multiple interpretations"],3],
+[`Culture is:`,["Individual preference","Shared way of life defining communities","Only language","Only tradition"],1],
+[`Culture shapes:`,["Only individuals","Only politics","Identity","Only economics"],2],
+[`Beliefs include:`,["Only religion","Only ideas","Only perspectives","Religion, ideas, perspectives on world"],3],
+[`Traditions include:`,["Only weddings","Weddings, funerals, festivals, celebrations","Only funerals","Only festivals"],1],
+[`Rituals include:`,["Only religious events","Only national events","Eid, Basant, Milad, cultural events","Only family events"],2],
+[`If you study the art of any era, you will understand:`,["Only the artists","Only the politics","Only the religion","The society"],3]
+]},
+
+/* ---------- SECTION B5 : HUMANITIES vs SCIENCES (45) ---------- */
+{
+title:"Section B5 — Humanities vs Natural &amp; Social Sciences (Lecture 1 &amp; 1A)",
+qs:[
+[`The three great pillars of human knowledge are:`,["Physics, Chemistry, Biology","Natural Science, Social Science, Humanities","Art, Music, Literature","Philosophy, Religion, Science"],1],
+[`Natural Science seeks:`,["Patterns of human behavior","Meaning of human condition","Laws governing the physical universe","Creative expression"],2],
+[`Social Science decodes:`,["Physical laws","Patterns of human behavior and social structures","Meaning of art","Creative expression"],1],
+[`Humanities interprets:`,["Physical laws","Human behavior patterns","Natural phenomena","Meaning of human condition"],3],
+[`Natural Science method involves:`,["Interpretation","Hypothesis-driven research and experiments","Creative expression","Critical analysis"],1],
+[`Social Science method involves:`,["Only experiments","Only creative expression","Mixed qualitative and quantitative research","Only interpretation"],2],
+[`Humanities method involves:`,["Experiments","Quantitative research","Hypothesis testing","Critical analysis and creative expression"],3],
+[`Natural Science output is:`,["Behavioral theories","Predictive models","Interpretation and insight","Creative works"],1],
+[`Social Science output is:`,["Predictive models","Interpretation","Behavioral theories","Creative works"],2],
+[`Humanities output is:`,["Predictive models","Behavioral theories","Physical laws","Interpretation and insight"],3],
+[`Science asks:`,["Why and how?","What is it?","What should be?","What is beautiful?"],1],
+[`Humanities asks:`,["What is it?","What is the formula?","Why and how?","What is the equation?"],2],
+[`Science asks: What is rain? Humanities asks:`,["What is the formula for rain?","How does rain symbolize in poetry?","What causes rain?","When does rain occur?"],1],
+[`Science says: What medicine works? Humanities asks:`,["How does medicine work?","What is the formula?","When to take it?","Who should receive it first and why?"],3],
+[`Humanities complements science by adding:`,["Only facts","Ethics, meaning, and moral consideration","Only data","Only experiments"],1],
+[`Humanities develops:`,["Only memorization","Only physical skills","Critical thinking","Only technical skills"],2],
+[`Critical thinking helps identify:`,["Only truth","Only facts","Only opinions","Fake news"],3],
+[`Humanities promotes:`,["Only individual success","Ethics and empathy","Only competition","Only profit"],1],
+[`Reading literature about poverty develops:`,["Only knowledge","Only statistics","Genuine empathy","Only facts"],2],
+[`Humanities shapes:`,["Only individuals","Only leaders","Only workers","Responsible citizenship"],3],
+[`Critical citizen constructively questions:`,["Only peers","Authorities and policies","Only students","Only teachers"],1],
+[`Ethical decision-maker considers:`,["Only personal benefit","Only profit","Consequences beyond personal benefit","Only efficiency"],2],
+[`Member of multiple communities respects:`,["Only own opinions","Only majority opinions","Only minority opinions","Different opinions and perspectives"],3],
+[`"A society without humanity may become powerful - but it will not be:"`,["Rich","Humane","Strong","Advanced"],1],
+[`Arts and humanities study:`,["Machines","Formulas","Human beings","Chemical reactions"],2],
+[`Humanities center is:`,["Only facts","Only data","Only experiments","Meaning, values, and interpretation"],3],
+[`Unlike mathematics, humanities:`,["Has always right answers","Explores multiple perspectives","Avoids interpretation","Only uses formulas"],1],
+[`Human thought explores:`,["Only science","Only mathematics","Truth, justice, God, ethics, meaning","Only physics"],2],
+[`Culture includes:`,["Only language","Only beliefs","Only rituals","Traditions, customs, beliefs, languages, rituals"],3],
+[`Expression includes:`,["Only poetry","Poetry, visual arts, drama, media, music","Only music","Only drama"],1],
+[`Philosophy studies:`,["Only reality","Only knowledge","Reality, knowledge, and values","Only values"],2],
+[`Literature includes:`,["Only novels","Only poetry","Only drama","Stories, poetry, drama reflecting human experiences"],3],
+[`Language studies:`,["Only grammar","How language evolves and shapes thinking","Only vocabulary","Only syntax"],1],
+[`History involves:`,["Only dates","Only events","Understanding past human experiences","Only biographies"],2],
+[`Visual and performing arts include:`,["Only painting","Only music","Only drama","Painting, music, drama, architecture"],3],
+[`Media and communication studies:`,["Only technology","How messages influence society","Only entertainment","Only news"],1],
+[`Natural Science focus:`,["Human behavior","Subjective meaning","Material entities and universal laws","Cultural values"],2],
+[`Social Science focus:`,["Physical laws","Human behavior and social structures","Subjective meaning","Cultural values"],1],
+[`Humanities and Arts focus:`,["Physical laws","Human behavior","Material entities","Subjective meaning and cultural values"],3],
+[`No single lens is:`,["Useful","Sufficient","Important","Valid"],1],
+[`Richest understanding emerges when:`,["Only science is used","Only humanities is used","All three lenses are applied together","Only social science is used"],2],
+[`Philosophy served as:`,["Only ethics","Only logic","Mother of all inquiry","Only metaphysics"],2],
+[`18th Century shift established:`,["Only philosophy","Only arts","Only social science","Empirical standards and separated natural philosophy into sciences"],3],
+[`19th Century specialization saw emergence of:`,["Only physics","Sociology, psychology, anthropology","Only chemistry","Only biology"],1]
+]},
+{
+title:"Section B5 (continued) — Humanities vs Sciences",
+qs:[
+[`Modern divergence created:`,["Only one discipline","Only two disciplines","Three-pillar structure","No disciplines"],2],
+[`All three domains share commitment to:`,["Only facts","Only theories","Only data","Rigorous inquiry and expansion of understanding"],3],
+[`Scientific method anchors:`,["Only natural science","Both natural and social sciences","Only social science","Only humanities"],1],
+[`Critical inquiry is brought by:`,["Only natural science","Only social science","Humanities","Only mathematics"],2],
+[`All three fields seek to:`,["Limit knowledge","Avoid questions","Maintain status quo","Push boundaries of what we know"],3],
+[`The Integrated Scholar should:`,["Focus on one discipline","Embrace curiosity and bridge the divide","Avoid interdisciplinarity","Only study science"],1],
+[`Future innovation depends on:`,["Only science","Only humanities","Synergy between quantitative rigor and qualitative depth","Only social science"],2],
+[`Leadership in society comes from:`,["Only natural scientists","Only engineers","Only doctors","Social sciences or humanities specialists"],3],
+[`Humanities does not oppose science but:`,["Replaces it","Complements it","Ignores it","Competes with it"],1],
+[`When you read literature about migration, you develop:`,["Only knowledge","Only statistics","Empathy for people with different experiences","Only facts"],2],
+[`Humanities education produces:`,["Only workers","Only leaders","Only artists","Responsible citizens"],3],
+[`Respecting different opinions while engaging in dialogue is:`,["Only academic","Democracy in practice","Only political","Only social"],1],
+[`The question "Can a society survive without arts and literature?" encourages:`,["Quick answers","Avoiding reflection","Deep thinking","Superficial learning"],2],
+[`The goal of humanities education is to:`,["Find right answers","Memorize facts","Pass exams","Develop thinking skills for engaging with important questions"],3],
+[`Arts and humanities are clubbed together because of:`,["Historical accident","Overwhelming overlapping","Government policy","Economic reasons"],1],
+[`Humanities sometimes uses:`,["Only subjective understanding","Only emotions","Tool of objective understanding","Only intuition"],2],
+[`Arts is always about:`,["Objective facts","Mathematical proofs","Scientific experiments","Finding subjective meanings"],3],
+[`In Arts, we learn by:`,["Analyzing components only","Discovering and stitching different things together","Avoiding creativity","Following rules only"],1],
+[`Bricolaging different things to create beauty is:`,["Science","Social science","Art","Mathematics"],2],
+[`The study of humanities helps us understand:`,["Only ourselves","Only facts","Pain, joy, and struggles of others","Only theories"],2],
+[`Humanities encourages:`,["Moral irresponsibility","Avoiding ethics","Ignoring consequences","Moral responsibility and ethical decision-making"],3]
+]}
+];
+
+/* ============================================================
+   RENDER + INTERACTIVITY
+   ============================================================ */
+const quizEl      = document.getElementById('quiz');
+const scoreEl     = document.getElementById('score');
+const wrongEl     = document.getElementById('wrong');
+const answeredEl  = document.getElementById('answered');
+const totalEl     = document.getElementById('total');
+const footerEl    = document.getElementById('footer');
+
+const LETTERS = ['A','B','C','D','E'];
+let totalQuestions = 0, answeredCount = 0, correctCount = 0, wrongCount = 0;
+
+DATA.forEach(section => { totalQuestions += section.qs.length; });
+totalEl.textContent = totalQuestions;
+
+let qNumber = 0;
+
+DATA.forEach(section => {
+  const sec = document.createElement('section');
+  sec.className = 'section';
+
+  const h2 = document.createElement('h2');
+  h2.innerHTML = section.title;
+  sec.appendChild(h2);
+
+  section.qs.forEach(([qText, options, correctIndex]) => {
+    qNumber++;
+
+    const card = document.createElement('div');
+    card.className = 'q';
+
+    const p = document.createElement('p');
+    p.className = 'qtext';
+
+    const numSpan = document.createElement('span');
+    numSpan.className = 'num';
+    numSpan.textContent = qNumber;
+
+    const txtSpan = document.createElement('span');
+    txtSpan.textContent = qText;
+
+    p.appendChild(numSpan);
+    p.appendChild(txtSpan);
+    card.appendChild(p);
+
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'opts';
+
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    const buttons = [];
+
+    options.forEach((optText, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+
+      const letter = document.createElement('span');
+      letter.className = 'letter';
+      letter.textContent = LETTERS[idx];
+
+      const label = document.createElement('span');
+      label.textContent = optText;
+
+      btn.appendChild(letter);
+      btn.appendChild(label);
+
+      btn.addEventListener('click', () => {
+        // lock the question
+        buttons.forEach(b => { b.disabled = true; });
+
+        const isCorrect = (idx === correctIndex);
+
+        // mark the correct one green
+        buttons[correctIndex].classList.add('correct');
+
+        if (isCorrect) {
+          correctCount++;
+          fb.className = 'feedback ok show';
+          fb.textContent = '✓ Correct!';
+        } else {
+          btn.classList.add('wrong');
+          wrongCount++;
+          fb.className = 'feedback no show';
+          fb.textContent = '✗ Incorrect — the correct answer is ' +
+                            LETTERS[correctIndex] + '. ' + options[correctIndex];
+          // dim the other untouched options
+          buttons.forEach((b, i) => {
+            if (i !== correctIndex && i !== idx) b.classList.add('dim');
+          });
+        }
+
+        answeredCount++;
+        card.classList.add('answered');
+        updateStats();
+      });
+
+      buttons.push(btn);
+      optsWrap.appendChild(btn);
+    });
+
+    card.appendChild(optsWrap);
+    card.appendChild(fb);
+    sec.appendChild(card);
+  });
+
+  quizEl.appendChild(sec);
+});
+
+function updateStats(){
+  scoreEl.textContent    = correctCount;
+  wrongEl.textContent    = wrongCount;
+  answeredEl.textContent = answeredCount;
+  footerEl.textContent =
+    'Progress: ' + answeredCount + ' / ' + totalQuestions + ' answered' +
+    '  |  Correct: ' + correctCount +
+    '  |  Wrong: ' + wrongCount;
+}
+updateStats();
+</script>
+</body>
+</html>
